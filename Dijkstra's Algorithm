@@ -13,7 +13,7 @@
 
 using namespace std;
 
-int *Dijkstra(int **GR, int V, int st) {
+int *DA(int **GR, int V, int st) {
 
 	int *distance, count, index, i, u;
 	bool *visited;
@@ -38,7 +38,7 @@ int *Dijkstra(int **GR, int V, int st) {
 
 void main()
 {
-	int dim, start;
+	int dim, startNode;
 	string file;
 	ifstream fileIN;
 	cout << "Enter the name " << endl;
@@ -60,12 +60,12 @@ void main()
 		}
 	}
 	cout << "Enter start node!" << endl;
-	cin >> start;
-	Dijkstra(Marray, dim,start - 1);
-	int *distance = Dijkstra(Marray, dim, start);
+	cin >> startNode;
+	DA(Marray, dim,start - 1);
+	int *distance = DA(Marray, dim, startNode);
 
 	int m = start; // start +1;
-	cout << "Weigth is :\n";
+	cout << "Weigth is : << endl";
 	for (int i = 0; i<dim; i++)
 		if (distance[i] != INT_MAX)
 			cout << m << " > " << i + 1 << " = " << distance[i] << endl;
