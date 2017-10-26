@@ -1,0 +1,78 @@
+// Dijkstra
+
+#include "stdafx.h"
+#include <iostream>
+#include <fstream>
+#include <array>
+#include <sstream>
+#include <string>
+#include <cstdlib>
+#include <vector>
+#include <cstdlib>
+#include <ctime>
+
+using namespace std;
+
+int *Dijkstra(int **GR, int V, int st) {
+
+	int *distance, count, index, i, u;
+	bool *visited;
+	distance = new int[V];
+	visited = new bool[V];
+	for (i = 0; i<V; i++) { distance[i] = INT_MAX; visited[i] = false; }
+	distance[st] = 0;
+	for (count = 0; count<V - 1; count++) {
+		int min = INT_MAX;
+		for (i = 0; i<V; i++)
+			if (!visited[i] && distance[i] <= min) { min = distance[i]; index = i; }
+		u = index;
+		visited[u] = true;
+		for (i = 0; i<V; i++)
+			if (!visited[i] && GR[u][i] && distance[u] != INT_MAX &&
+				distance[u] + GR[u][i]<distance[i])
+				distance[i] = distance[u] + GR[u][i];
+	}
+	return distance;
+}
+
+void main()
+{
+	
+	int dim, start;
+	string file;
+	ifstream fileIN;
+	cout << "Enter the name " << endl;
+	cin >> file; // Вводим размерность матрицы
+	unsigned int start_time = clock(); // включаем время
+	fileIN.open(file);
+	fileIN >> dim;// чтение размерности
+	int **Marray = new int*[dim]; // создание динамического массива
+	for (int c = 0; c < dim; c++)
+	{
+		Marray[c] = new int[dim];
+	}
+	for (int i = 0; i < dim; i++)
+	{
+		for (int j = 0; j < dim; j++)
+		{
+			fileIN >> Marray[i][j];
+
+		}
+	}
+	cout << "Enter start node!" << endl;
+	cin >> start;
+	Dijkstra(Marray, dim,start - 1);
+	int *distance = Dijkstra(Marray, dim, start);
+
+	int m = start; // start +1;
+	cout << "Weigth is :\n";
+	for (int i = 0; i<dim; i++)
+		if (distance[i] != INT_MAX)
+			cout << m << " > " << i + 1 << " = " << distance[i] << endl;
+		else cout << m << " > " << i + 1 << " = " << "INF" << endl;
+
+	unsigned int end_time = clock();
+	unsigned int search_time = end_time - start_time;
+	cout << "Time is : (sec)" << search_time / 100000.0 << endl;// выводим время
+	system("pause>>void");
+}
