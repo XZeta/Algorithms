@@ -61,7 +61,7 @@ void main()
 	}
 	cout << "Enter start node!" << endl;
 	cin >> startNode;
-	DA(Marray, dim,start - 1);
+	DA(Marray, dim,startNode - 1);
 	int *distance = DA(Marray, dim, startNode);
 
 	int m = start; // start +1;
