@@ -90,3 +90,4 @@ void main()
 	unsigned int search_time = end_time - start_time;
 	cout << "Time is : (sec)" << search_time / 100000.0 << endl;// выводим время
 	system("pause>>void");
+}
