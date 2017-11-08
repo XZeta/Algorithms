@@ -1,2 +1,110 @@
+// BellmanFordFinal.cpp : Defines the entry point for the console application.
+//
 
-(Coming soon)
+#include "stdafx.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <fstream>
+#include <iostream>
+#include <time.h>
+#include "stdafx.h"
+#include <iostream>
+#include <fstream>
+#include <array>
+#include <sstream>
+#include <iomanip>
+#include <stdio.h>
+#include <string>
+#include <cstdlib>
+#include <vector>
+#include <cstdlib>
+#include <ctime>
+#define inf 100000
+
+using namespace std;
+
+struct Edges {
+	int x, y, weigth;
+};
+const int Vmax = 1000;
+const int Emax = Vmax*(Vmax - 1) / 2;
+int i, j, n, e, start;
+int maxtimecount = 1;
+Edges edge[Emax];
+int V[Vmax];
+
+
+//алгоритм Беллмана-Форда
+void bellman_ford(int n, int s)
+{
+	for (int k = 0; k < maxtimecount; k++) {
+
+		int i, j;
+		for (i = 0; i < n; i++) V[i] = inf;
+		V[s] = 0;
+
+		for (i = 0; i < n - 1; i++)
+			for (j = 0; j < e; j++)
+				if (V[edge[j].y] + edge[j].weigth < V[edge[j].x])
+					V[edge[j].x] = V[edge[j].y] + edge[j].weigth;
+	}
+	// проверка на отрицательные циклы
+	bool x = true;
+	for (i = 0; i<n; i++)
+	{
+		if (i != n - 1)
+			for (j = 0; j<e; j++)
+				if (V[edge[j].y] + edge[j].weigth<V[edge[j].x])
+					V[edge[j].x] = V[edge[j].y] + edge[j].weigth;
+		if (i == n - 1)
+			for (j = 0; j<e; j++)
+				if (V[edge[j].y] + edge[j].weigth<V[edge[j].x]) x = false;
+	}
+	if (!x) cout << endl << "Graph has negative cycle" << endl;
+
+	for (i = 0; i < n; i++) if (V[i] == inf)
+		cout << "маршрут недоступен" << endl;
+	else cout << V[i] << endl;
+}
+
+void main()
+{
+	setlocale(LC_ALL, "Rus");
+	int dim, start,weigth;
+	string file;
+	ifstream fileIN;
+	cout << "Enter the name " << endl;
+	cin >> file;
+	unsigned int start_time = clock(); // включаем время
+	fileIN.open(file);
+	fileIN >> dim;
+	cout << "Enter start node!: " << endl;
+	cin >> start;
+
+	if (fileIN.is_open())
+	{
+		
+		e = 0;
+		for (i = 0; i<dim; i++)
+			for (j = 0; j<dim; j++)
+			{
+				fileIN >> weigth;
+				if (weigth != 0)
+				{
+					edge[e].x = i; 
+					edge[e].y = j; 
+					edge[e].weigth = weigth; 
+					e++;
+				}
+			}
+		fileIN.close();
+	}
+	bellman_ford(dim, start - 1);
+	unsigned int end_time = clock();
+	unsigned int search_time = end_time - start_time;
+	cout << "Time is : (sec)" << search_time / 10000.0 << endl;// выводим время
+	system("pause>>void");
+}
+// Rdy
+
+
