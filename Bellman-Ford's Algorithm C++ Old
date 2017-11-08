@@ -1,0 +1,93 @@
+#include "stdafx.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <fstream>
+#include <iostream>
+#include <time.h>
+#define inf 100000
+
+using namespace std;
+
+struct Edges {
+	int u, v, w;
+};
+const int Vmax = 1000;
+const int Emax = Vmax*(Vmax - 1) / 2;
+int i, j, n, e, start;
+int maxtimecount = 1;
+Edges edge[Emax];
+int d[Vmax];
+//алгоритм Беллмана-Форда
+void bellman_ford(int n, int s)
+{
+	for (int k = 0; k < maxtimecount; k++) {
+
+		int i, j;
+		for (i = 0; i < n; i++) d[i] = inf;
+		d[s] = 0;
+
+		for (i = 0; i < n - 1; i++)
+			for (j = 0; j < e; j++)
+				if (d[edge[j].v] + edge[j].w < d[edge[j].u])
+					d[edge[j].u] = d[edge[j].v] + edge[j].w;
+	}
+
+	for (i = 0; i < n; i++) if (d[i] == inf)
+		cout << "inf" << endl;
+	else cout << d[i] << endl;
+}
+//главная функция
+void main()
+{
+	int w;
+
+	//Считывание матрицы из файла
+	ifstream in("test1.txt");
+	if (in.is_open())
+	{
+		in >> n;
+		e = 0;
+		for (i = 0; i<n; i++)
+			for (j = 0; j<n; j++)
+			{
+				in >> w;
+				if (w != 0)
+				{
+					edge[e].v = i; // Строка
+					edge[e].u = j; // Столбец
+					edge[e].w = w; // Вес
+					e++; // Номер грани
+				}
+			}
+		in.close();
+	}
+	else
+	{
+		//Если открытие файла прошло не успешно
+		cout << "File not found" << endl;;
+	}
+
+
+	cout << "Vvedite nomer vershiny ";
+	cin >> start;
+
+	// проверка на отрицательные циклы
+	bool x = true;
+	for (i = 0; i<n; i++)
+	{
+		if (i != n - 1)
+			for (j = 0; j<e; j++)
+				if (d[edge[j].v] + edge[j].w<d[edge[j].u])
+					d[edge[j].u] = d[edge[j].v] + edge[j].w;
+		if (i == n - 1)
+			for (j = 0; j<e; j++)
+				if (d[edge[j].v] + edge[j].w<d[edge[j].u]) x = false;
+	}
+	if (!x) cout << endl << "Graph soderjit otricatelny cycle" << endl;
+	float fTimeStart = clock() / (float)CLOCKS_PER_SEC;
+	bellman_ford(n, start - 1);
+	float fTimeStop = clock() / (float)CLOCKS_PER_SEC;
+	long double time = (fTimeStop - fTimeStart);
+	printf("Dlitelnost %f secund delenoe na %d\n", time, maxtimecount);
+	system("pause>>void");
+}
