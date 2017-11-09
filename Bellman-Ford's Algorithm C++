@@ -1,6 +1,5 @@
 // BellmanFordFinal.cpp : Defines the entry point for the console application.
-//0
-
+//
 #include "stdafx.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -31,7 +30,6 @@ int maxtimecount = 1;
 Edges edge[Emax];
 int V[Vmax];
 
-
 //алгоритм Беллмана-Форда
 void bellman_ford(int n, int s)
 {
@@ -47,7 +45,6 @@ void bellman_ford(int n, int s)
 					V[edge[j].x] = V[edge[j].y] + edge[j].weigth;
 	}
 	
-
 void main()
 {
 	setlocale(LC_ALL, "Rus");
