@@ -1,1 +1,165 @@
 
+// MkUltra
+#include "stdafx.h"
+#include <iostream>
+#include <fstream>
+#include <array>
+#include <sstream>
+#include <stdio.h>
+#include <string>
+#include <cstdlib>
+#include <vector>
+#include <ctime>
+#include <limits>
+#include <stdlib.h>
+#include <time.h>
+#define inf 100000
+
+using namespace std;
+// bellman_ford
+struct Edges {
+	int u, v, w;
+};
+const int Vmax = 1000;
+const int Emax = Vmax*(Vmax - 1) / 2;
+int i, j, n, e, start;
+int maxtimecount = 1;
+Edges edge[Emax];
+int d[Vmax];
+
+void bellman_ford(int n, int s)
+{
+	for (int k = 0; k < maxtimecount; k++) {
+
+		int i, j;
+		for (i = 0; i < n; i++) d[i] = inf;
+		d[s] = 0;
+
+		for (i = 0; i < n - 1; i++)
+			for (j = 0; j < e; j++)
+				if (d[edge[j].v] + edge[j].w < d[edge[j].u])
+					d[edge[j].u] = d[edge[j].v] + edge[j].w;
+	}
+
+	
+	for (i = 0; i < n; i++) {
+		if (d[i] != inf)
+		{
+			cout << s+1 << " > " << i + 1 << " = " << d[i] << endl;
+		}
+		else { cout << s+1 << " > " << i + 1 << " = " << "маршрут недоступен" << endl; }
+	}
+
+}
+
+
+// Dijkstra
+int *Da(int **GR, int V, int st) {
+
+	int *distance, count, index, i, u;
+	bool *visited;
+	distance = new int[V];
+	visited = new bool[V];
+	for (i = 0; i<V; i++) { distance[i] = INT_MAX; visited[i] = false; }
+	distance[st] = 0;
+	for (count = 0; count<V - 1; count++) {
+		int min = INT_MAX;
+		for (i = 0; i<V; i++)
+			if (!visited[i] && distance[i] <= min) { min = distance[i]; index = i; }
+		u = index;
+		visited[u] = true;
+		for (i = 0; i<V; i++)
+			if (!visited[i] && GR[u][i] && distance[u] != INT_MAX &&
+				distance[u] + GR[u][i]<distance[i])
+				distance[i] = distance[u] + GR[u][i];
+	}
+	return distance;
+};
+
+void main()
+{
+	setlocale(LC_ALL, "Rus");
+
+	int dim, start,t,w;
+	string file;
+	ifstream fileIN, fileOn;
+	cout << "Enter the name " << endl;
+	cin >> file;
+	unsigned int start_time = clock();
+	fileIN.open(file);
+	fileIN >> dim;
+	int **Marray = new int*[dim];
+	for (int c = 0; c < dim; c++)
+	{
+		Marray[c] = new int[dim];
+	}
+	for (int i = 0; i < dim; i++)
+	{
+		for (int j = 0; j < dim; j++)
+		{
+			fileIN >> Marray[i][j];
+		}
+	}
+	fileIN.close();
+	cout << "Enter start node!" << endl;
+	cin >> start;
+	Da(Marray, dim, start - 1);
+	int *distance = Da(Marray, dim, start - 1);
+	int m = start;
+	cout << "Алгоритм дейкстры" << endl;
+	cout << "Стоимость пути из начальной вершины до остальных:\n";
+	for (int i = 0; i < dim; i++)
+	{
+		if (distance[i] != INT_MAX)
+		{
+			cout << m << " > " << i + 1 << " = " << distance[i] << endl;
+		}
+		else { cout << m << " > " << i + 1 << " = " << "маршрут недоступен" << endl; }
+
+	}
+	cout << "Алгоритм Форда-Беллмана" << endl;
+	fileOn.open(file);
+	if (fileOn.is_open())
+	{
+		fileOn >> t;
+		e = 0;
+		for (i = 0; i<t; i++)
+			for (j = 0; j<t; j++)
+			{
+				fileOn >> w;
+				if (w != 0)
+				{
+					edge[e].v = i; // Строка
+					edge[e].u = j; // Столбец
+					edge[e].w = w; // Вес
+					e++; // Номер грани
+				}
+			}
+		fileOn.close();
+	}
+	else
+	{
+		//Если открытие файла прошло не успешно
+		cout << "File not found" << endl; // мусор
+	}
+	fileOn.close();
+	bool z = true;
+	for (int i = 0; i<t; i++)
+	{
+		if (i != t - 1)
+			for (j = 0; j<e; j++)
+				if (d[edge[j].v] + edge[j].w<d[edge[j].u])
+					d[edge[j].u] = d[edge[j].v] + edge[j].w;
+		if (i == t - 1)
+			for (j = 0; j<e; j++)
+				if (d[edge[j].v] + edge[j].w<d[edge[j].u]) z = false;
+	}
+	if (!z) cout << endl << "Graph has negative cycle" << endl;
+	bellman_ford(t, start - 1);
+	
+
+	unsigned int end_time = clock();
+	unsigned int search_time = end_time - start_time;
+	cout << "Time is : (sec)" << search_time / 100000.0 << endl;// выводим время
+	system("pause");
+}
