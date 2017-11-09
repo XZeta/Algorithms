@@ -7,7 +7,6 @@
 #include <fstream>
 #include <iostream>
 #include <time.h>
-#include "stdafx.h"
 #include <iostream>
 #include <fstream>
 #include <array>
@@ -17,7 +16,6 @@
 #include <string>
 #include <cstdlib>
 #include <vector>
-#include <cstdlib>
 #include <ctime>
 #define inf 100000
 
@@ -48,24 +46,7 @@ void bellman_ford(int n, int s)
 				if (V[edge[j].y] + edge[j].weigth < V[edge[j].x])
 					V[edge[j].x] = V[edge[j].y] + edge[j].weigth;
 	}
-	// проверка на отрицательные циклы
-	bool x = true;
-	for (i = 0; i<n; i++)
-	{
-		if (i != n - 1)
-			for (j = 0; j<e; j++)
-				if (V[edge[j].y] + edge[j].weigth<V[edge[j].x])
-					V[edge[j].x] = V[edge[j].y] + edge[j].weigth;
-		if (i == n - 1)
-			for (j = 0; j<e; j++)
-				if (V[edge[j].y] + edge[j].weigth<V[edge[j].x]) x = false;
-	}
-	if (!x) cout << endl << "Graph has negative cycle" << endl;
-
-	for (i = 0; i < n; i++) if (V[i] == inf)
-		cout << "маршрут недоступен" << endl;
-	else cout << V[i] << endl;
-}
+	
 
 void main()
 {
@@ -99,6 +80,24 @@ void main()
 			}
 		fileIN.close();
 	}
+	// проверка на отрицательные циклы
+	bool x = true;
+	for (i = 0; i<n; i++)
+	{
+		if (i != n - 1)
+			for (j = 0; j<e; j++)
+				if (V[edge[j].y] + edge[j].weigth<V[edge[j].x])
+					V[edge[j].x] = V[edge[j].y] + edge[j].weigth;
+		if (i == n - 1)
+			for (j = 0; j<e; j++)
+				if (V[edge[j].y] + edge[j].weigth<V[edge[j].x]) x = false;
+	}
+	if (!x) cout << endl << "Graph has negative cycle" << endl;
+
+	for (i = 0; i < n; i++) if (V[i] == inf)
+		cout << "маршрут недоступен" << endl;
+	else cout << V[i] << endl;
+}
 	bellman_ford(dim, start - 1);
 	unsigned int end_time = clock();
 	unsigned int search_time = end_time - start_time;
