@@ -1,5 +1,5 @@
 // BellmanFordFinal.cpp : Defines the entry point for the console application.
-//
+//0
 #include "stdafx.h"
 #include <stdio.h>
 #include <stdlib.h>
