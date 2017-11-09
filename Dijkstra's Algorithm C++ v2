@@ -1,7 +1,5 @@
 // DijkstraF.cpp : Defines the entry point for the console application.
 //
-
-
 #include "stdafx.h"
 #include <iostream>
 #include <fstream>
@@ -17,11 +15,7 @@
 #include <limits>
 #include <iostream>
 
-
 using namespace std;
-
-
-
 
 int *Da(int **GR, int V, int st) {
 	
@@ -45,9 +39,6 @@ int *Da(int **GR, int V, int st) {
 	return distance;
 }
 
-
-
-
 void main()
 {
 	setlocale(LC_ALL, "Rus");
@@ -70,22 +61,18 @@ void main()
 		for (int j = 0; j < dim; j++)
 		{
 			fileIN >> Marray[i][j];
-
 		}
 	}
 	cout << "Enter start node!" << endl;
 	cin >> start;
 	Da(Marray, dim,start - 1);
 	int *distance = Da(Marray, dim, start-1);
-
 	int m = start; // start +1;
 	cout << "Стоимость пути из начальной вершины до остальных:\n";
 	for (int i = 0; i<dim; i++)
 		if (distance[i] != INT_MAX)
 			cout << m << " > " << i + 1 << " = " << distance[i] << endl;
 		else cout << m << " > " << i + 1 << " = " << "маршрут недоступен" << endl;
-
-
 	unsigned int end_time = clock();
 	unsigned int search_time = end_time - start_time;
 	cout << "Time is : (sec)" << search_time / 100000.0 << endl;// выводим время
