@@ -1,10 +1,169 @@
+//// MkUltra.cpp : Defines the entry point for the console application.
+////
+//
+//#include "stdafx.h"
+//#include <iostream>
+//#include <fstream>
+//#include <array>
+//#include <sstream>
+//#include <iomanip>
+//#include <stdio.h>
+//#include <string>
+//#include <cstdlib>
+//#include <vector>
+//#include <ctime>
+//#include <limits>
+//#include "stdafx.h"
+//#include <stdio.h>
+//#include <stdlib.h>
+//#include <fstream>
+//#define inf 100000
+//
+//using namespace std;
+//
+//
+//struct Edges {
+//	int x, y, weigth;
+//};
+//const int Vmax = 1000;
+//const int Emax = Vmax*(Vmax - 1) / 2;
+//int i, j, n, e, start;
+//int maxtimecount = 1;
+//Edges edge[Emax];
+//int V[Vmax];
+//
+//void bellman_ford(int n, int s)
+//{
+//	for (int k = 0; k < maxtimecount; k++) {
+//
+//		int i, j;
+//		for (i = 0; i < n; i++) V[i] = inf;
+//		V[s] = 0;
+//
+//		for (i = 0; i < n - 1; i++)
+//			for (j = 0; j < e; j++)
+//				if (V[edge[j].y] + edge[j].weigth < V[edge[j].x])
+//					V[edge[j].x] = V[edge[j].y] + edge[j].weigth;
+//	}
+//	for (i = 0; i < n; i++) if (V[i] == inf)
+//		cout << "маршрут недоступен" << endl;
+//	else cout << V[i] << endl;
+//};
+//
+//
+//
+//int *Da(int **GR, int J, int st) {
+//
+//	int *distance, count, index, i, u;
+//	bool *visited;
+//	distance = new int[J];
+//	visited = new bool[J];
+//	for (i = 0; i<J; i++) { distance[i] = INT_MAX; visited[i] = false; }
+//	distance[st] = 0;
+//	for (count = 0; count<J - 1; count++) {
+//		int min = INT_MAX;
+//		for (i = 0; i<J; i++)
+//			if (!visited[i] && distance[i] <= min) { min = distance[i]; index = i; }
+//		u = index;
+//		visited[u] = true;
+//		for (i = 0; i<J; i++)
+//			if (!visited[i] && GR[u][i] && distance[u] != INT_MAX &&
+//				distance[u] + GR[u][i]<distance[i])
+//				distance[i] = distance[u] + GR[u][i];
+//	}
+//	return distance;
+//};
+//
+//
+//void main()
+//{
+//	setlocale(LC_ALL, "Rus");
+//
+//	int dim, start, weigth;;
+//	string file;
+//	ifstream fileIN;
+//	cout << "Enter the name " << endl;
+//	cin >> file;
+//	unsigned int start_time = clock(); // включаем время
+//	fileIN.open(file);
+//	fileIN >> dim;// чтение размерности
+//	int **Marray = new int*[dim]; // создание динамического массива 
+//	for (int c = 0; c < dim; c++)
+//	{
+//		Marray[c] = new int[dim];
+//	}
+//	for (int i = 0; i < dim; i++)
+//	{
+//		for (int j = 0; j < dim; j++)
+//		{
+//			fileIN >> Marray[i][j];
+//
+//		}
+//	}
+//	fileIN.close();
+//	ifstream fileON;
+//	
+//	fileON.open(file);
+//	cout << "Enter start node!" << endl;
+//	cin >> start;
+//	bool x = true;
+//	for (i = 0; i < n; i++)
+//	{
+//		if (i != n - 1)
+//			for (j = 0; j < e; j++)
+//				if (V[edge[j].y] + edge[j].weigth < V[edge[j].x])
+//					V[edge[j].x] = V[edge[j].y] + edge[j].weigth;
+//		if (i == n - 1)
+//			for (j = 0; j < e; j++)
+//				if (V[edge[j].y] + edge[j].weigth < V[edge[j].x]) x = false;
+//	}
+//	if (!x) cout << endl << "Graph has negative cycle" << endl;
+//
+//	if (fileON.is_open())
+//	{
+//
+//		e = 0;
+//		for (i = 0; i < dim; i++)
+//			for (j = 0; j < dim; j++)
+//			{
+//				fileON >> weigth;
+//				if (weigth != 0)
+//				{
+//					edge[e].x = i;
+//					edge[e].y = j;
+//					edge[e].weigth = weigth;
+//					e++;
+//				}
+//			}
+//		fileON.close();
+//	}
+//	
+//
+//	Da(Marray, dim, start - 1);
+//	int *distance = Da(Marray, dim, start - 1);
+//	bellman_ford(dim, start - 1);
+//
+//	int m = start;
+//	cout << "Стоимость пути из начальной вершины до остальных:\n";
+//	for (int i = 0; i < dim; i++)
+//		if (distance[i] != INT_MAX)
+//			cout << m << " > " << i + 1 << " = " << distance[i] << endl;
+//		else cout << m << " > " << i + 1 << " = " << "маршрут недоступен" << endl;
+//
+//
+//		unsigned int end_time = clock();
+//		unsigned int search_time = end_time - start_time;
+//		cout << "Time is : (sec)" << search_time / 100000.0 << endl;// выводим время
+//		system("pause");
+//
+//}
 
-// MkUltra
 #include "stdafx.h"
 #include <iostream>
 #include <fstream>
 #include <array>
 #include <sstream>
+#include <iomanip>
 #include <stdio.h>
 #include <string>
 #include <cstdlib>
@@ -16,7 +175,7 @@
 #define inf 100000
 
 using namespace std;
-// bellman_ford
+//
 struct Edges {
 	int u, v, w;
 };
@@ -47,13 +206,13 @@ void bellman_ford(int n, int s)
 		{
 			cout << s+1 << " > " << i + 1 << " = " << d[i] << endl;
 		}
-		else { cout << s+1 << " > " << i + 1 << " = " << "маршрут недоступен" << endl; }
+		else { cout << s+1 << " > " << i + 1 << " = " << "INF" << endl; }
 	}
 
 }
 
 
-// Dijkstra
+//
 int *Da(int **GR, int V, int st) {
 
 	int *distance, count, index, i, u;
@@ -140,7 +299,7 @@ void main()
 	else
 	{
 		//Если открытие файла прошло не успешно
-		cout << "File not found" << endl; // мусор
+		cout << "File not found" << endl;;
 	}
 	fileOn.close();
 	bool z = true;
