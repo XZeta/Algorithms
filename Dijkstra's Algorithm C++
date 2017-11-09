@@ -1,5 +1,5 @@
 // Dijkstra C++
-//
+// Удалить
 #include "stdafx.h"
 #include <iostream>
 #include <fstream>
