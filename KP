@@ -1,0 +1,248 @@
+// ConsoleApplication3.cpp: определяет точку входа для консольного приложения.
+//1218 timus
+
+// ConsoleApplication58.cpp : Defines the entry point for the console application.
+// Нерекурсивный тимбилдинг
+
+
+// ConsoleApplication18.cpp: определяет точку входа для консольного приложения.
+//
+
+#include "stdafx.h"
+#include <vector>
+#include <queue>
+#include <iostream>
+#include <fstream>
+#include <map>
+#include <string>
+#include <algorithm>
+#include <functional>
+#include <stack>
+
+using namespace std;
+using graph = vector <vector<int>>;
+
+graph Transponse(graph &G) {
+	int N = G.size();
+	graph GT(N);
+	for (int i = 0; i < N; i++) {
+		for (auto &v : G[i]) {
+			//GT[v].push_back(i);
+		}
+	}
+	return GT;
+}
+
+void DFSfromV(graph &G, int v, vector<int>&mark, vector<int>&p, vector<int> &top) {
+	mark[v] = 1;
+	int c = 0;
+	for (auto &i : G[v]) {
+		if (mark[i] == 0) {
+			DFSfromV(G, i, mark, p, top);
+			p[i] = v;
+		}
+		else
+		{
+			c = +1;
+		}
+
+	}
+	mark[v] = 2;
+	top.push_back(v);
+}
+
+graph GetGraphFromStreamMod(ifstream inp) {
+	int N;
+	inp >> N; graph G(N);
+	while (!inp.eof()) {
+		int a, b = -1;
+		inp >> a >> b;
+		if (b == -1)continue;
+		G[a].push_back(b);
+	}
+	return G;
+
+
+
+void DFSfromV(graph &G,int v,vector<int> & mark)
+{
+	stack<pair<int, int>> s; // 
+	s.push({v,0});
+	while (s.size())
+	{
+		auto t = s.top();
+		s.pop();
+		if (t.second == G[t.first].size())
+		{
+			mark[t.first] = 2;
+			continue;
+		}
+		if (t.second == 0)
+		{
+			mark[t.first] = 1;
+		}
+		int k = t.second;
+		while (k < G[t.first].size() && mark[G[t.first][k]]= 0)
+		{
+			k++;
+			s.push({ t.first,k + 1 });
+			s.push({ G[t.first[k]],0 });
+		}
+		else
+		{
+			mark[t.first] = 2;
+		}
+
+	}
+}
+
+
+
+
+
+//void DFSfromVT(graph &G, int v, vector<int>&mark, vector<int>&p, vector<int> &number, int numberSSK) {
+//	mark[v] = 1;
+//	for (auto &i : G[v]) {
+//		if (mark[i] == 0) {
+//			DFSfromVT(G, i, mark, p, number, numberSSK);
+//			p[i] = v;
+//		}
+//	}
+//	number[v] = numberSSK;
+//	mark[v] = 2;
+//};
+//void DFST(graph &G, vector<int>&p, vector<int>&top, vector<int>&number) {
+//	int N = G.size();
+//	int numberSSK = 0;
+//	vector<int> mark(N, 0);
+//	for (auto &v : top) {
+//		if (mark[v] == 0) {
+//			DFSfromVT(G, v, mark, p, number, numberSSK);
+//			numberSSK++;
+//		}
+//	}
+//
+//}
+
+void DFSM(graph &G, vector<int>&p, vector<int>&top) {
+	int N = G.size();
+	int C = 0;
+	vector<int> mark(N, 0);
+	for (int i = 0; i < N; i++) {
+		if (mark[i] == 0)
+		{
+			DFSfromV(G, i, mark, p, top);
+		}
+		else
+		{
+			C = +1;
+		}
+	}
+	reverse(top.begin(), top.end());
+	cout << "C = " << C << endl;
+}
+
+bool DFSfromV2(graph &G, int v, vector<int>&mark) {
+	mark[v] = 1;
+	for (auto &i : G[v]) {
+		if (mark[i] == 0) {
+			//DFSfromV2(G, i, mark);
+			return false;
+		}
+	}
+	mark[v] = 2;
+	return true;
+}
+
+bool DFS2(graph &G, vector<int> &last) {
+	reverse(last.begin(), last.end());
+	int N = G.size();
+	vector<int> mark(N, 0);
+	for (int i = 0; i < last.size(); i++) {
+		if (mark[last[i]] == 0) {
+			if (!DFSfromV2(G, last[i], mark)) return false;
+		}
+	}
+	return true;
+}
+
+void FindSSK(graph &G, vector<int>&number, vector<int>&top, vector<int>&p) {
+	DFS(G, p, top);
+	auto GT = Transponse(G);
+	DFST(GT, p, top, number);
+}
+
+
+
+graph GetGraphFromStream(ifstream inp) {
+	int N;
+	inp >> N; graph G(N);
+	while (!inp.eof()) {
+		int a, b = -1;
+		inp >> a >> b;
+		if (b == -1)continue;
+		G[a].push_back(b);
+	}
+	return G;
+}
+
+graph GetGraphFromStream2(istream &inp, vector<int> &last) {
+	int N, V;
+	inp >> N >> V;
+	graph G(N);
+	last = vector<int>(N, NULL);
+	for (int i = 0; i < V; i++) {
+		int a, b;
+		inp >> a >> b;
+		G[a - 1].push_back(b - 1);
+	}
+	for (int i = 0; i < N; i++) {
+		int a;
+		inp >> a;
+		last[i] = a - 1;
+	}
+	return G;
+}
+
+graph GetGraphFromStream3(istream &inp) {
+	int N;
+	inp >> N; graph G(N);
+	for (int i = 0; i < N; i++) {
+		int a = -1;
+		inp >> a;
+		while (a != 0) {
+			G[i].push_back(a - 1);
+			inp >> a;
+		}
+	}
+	return G;
+}
+
+
+int main()
+{
+	//auto G = GetGraphFromStream(ifstream("Graph.txt"));
+	vector<int>last;
+	auto G = GetGraphFromStream(cin);
+	int N = G.size();
+	vector<int>number(N, -1);
+	/*for (auto &v : last){
+	cout << v << " ";
+	}
+	cout << endl;*/
+	vector<int>p(N, -1);
+	vector<int>top;
+	DFSM(G, p, top);
+	/*for (int i = 0; i < N; i++) {
+	cout << i << " " << p[i] << endl;
+	}*/
+	for (auto &v : top) {
+		cout << v + 1 << " ";
+	}
+	/*cout << endl;
+	if (DFS2(G,last)) cout << "YES" << endl;
+	else cout << "NO" << endl;*/
+	return 0;
+}
+
+
